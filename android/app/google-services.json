@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "448128087215",
+    "project_id": "listin-flutter-firebase",
+    "storage_bucket": "listin-flutter-firebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448128087215:android:1271900f4ff232b290505a",
+        "android_client_info": {
+          "package_name": "com.example.listin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC533v4mc2Jss0moBoqyjOEmeQeAP4giWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
