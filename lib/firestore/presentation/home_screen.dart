@@ -50,6 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: List.generate(listListins.length, (index) {
                   Listin model = listListins[index];
                   return ListTile(
+                    onTap: () {},
+                    onLongPress: () {
+                      showFormModal(model: model);
+                    },
                     leading: const Icon(Icons.list_alt_rounded),
                     title: Text(model.name),
                     subtitle: Text(model.id),
@@ -60,12 +64,21 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  showFormModal() {
+  showFormModal({Listin? model}) {
     String title = "Adicionar Listin";
     String confirmationButton = "Salvar";
     String skipButton = "Cancelar";
 
     TextEditingController nameController = TextEditingController();
+
+    // Caso esteja editando
+
+    if (model != null) {
+      title = "Editando ${model.name}";
+      nameController.text = model.name;
+
+      // Ao clicar no botão de excluir, remover o documento do Firestore
+    }
 
     showModalBottomSheet(
       context: context,
@@ -104,6 +117,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         id: const Uuid().v1(),
                         name: nameController.text,
                       );
+
+                      // Usar id do model se estiver editando
+
+                      if (model != null) {
+                        listin.id = model.id;
+                      }
+
                       // Salvar no Firestore
                       firestore
                           .collection("listins")
