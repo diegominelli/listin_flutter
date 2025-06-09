@@ -11,9 +11,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Listin> listListins = [];
+  List<Listin> listListins = [];
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    refresh();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           .doc(listin.id)
                           .set(listin.toMap());
 
+                      // Atualizar a lista
+                      refresh();
+
                       // Fechar o modal
                       Navigator.pop(context);
                     },
@@ -108,5 +117,21 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
+  }
+
+  refresh() async {
+    List<Listin> temp = [];
+
+    QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
+        .collection("listins")
+        .get();
+
+    for (var doc in snapshot.docs) {
+      temp.add(Listin.fromMap(doc.data()));
+    }
+
+    setState(() {
+      listListins = temp;
+    });
   }
 }
