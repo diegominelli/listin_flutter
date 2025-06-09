@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../models/listin.dart';
+import '../helpers/firestore_analytics.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,12 +13,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Listin> listListins = [];
-
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirestoreAnalytics analytics = FirestoreAnalytics();
 
   @override
   void initState() {
     refresh();
+    analytics.incrementarAcessosTotais();
     super.initState();
   }
 
@@ -41,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           : RefreshIndicator(
               onRefresh: () {
+                analytics.incrementarAtualizacoesManuais();
                 return refresh();
               },
               child: ListView(
@@ -106,6 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           .collection("listins")
                           .doc(listin.id)
                           .set(listin.toMap());
+
+                      analytics.incrementarListasAdicionadas();
 
                       // Atualizar a lista
                       refresh();
