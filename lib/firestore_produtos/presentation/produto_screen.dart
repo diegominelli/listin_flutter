@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../../firestore/models/listin.dart';
@@ -21,6 +22,8 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
   List<Produto> listaProdutosPegos = [
     Produto(id: "UUID", name: "Laranja", amount: 5, price: 1, isComprado: true),
   ];
+
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +197,13 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
                         produto.price = double.parse(priceController.text);
                       }
 
-                      // TODO: Salvar no Firestore
+                      // Salvar no Firestore
+                      firestore
+                          .collection("listins")
+                          .doc(widget.listin.id)
+                          .collection("produtos")
+                          .doc(produto.id)
+                          .set(produto.toMap());
 
                       // Atualizar a lista
                       refresh();
