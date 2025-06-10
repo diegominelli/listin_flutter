@@ -61,7 +61,11 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
           Column(
             children: List.generate(listaProdutosPlanejados.length, (index) {
               Produto produto = listaProdutosPlanejados[index];
-              return ListTileProduto(produto: produto, isComprado: false);
+              return ListTileProduto(
+                produto: produto,
+                isComprado: false,
+                showModel: showFormModal,
+              );
             }),
           ),
           const Padding(
@@ -76,7 +80,11 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
           Column(
             children: List.generate(listaProdutosPegos.length, (index) {
               Produto produto = listaProdutosPegos[index];
-              return ListTileProduto(produto: produto, isComprado: true);
+              return ListTileProduto(
+                produto: produto,
+                isComprado: true,
+                showModel: showFormModal,
+              );
             }),
           ),
         ],
