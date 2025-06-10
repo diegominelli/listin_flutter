@@ -49,14 +49,29 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ListView(
                 children: List.generate(listListins.length, (index) {
                   Listin model = listListins[index];
-                  return ListTile(
-                    onTap: () {},
-                    onLongPress: () {
-                      showFormModal(model: model);
+                  return Dismissible(
+                    key: ValueKey<Listin>(model),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 8),
+                      child: const Icon(Icons.delete, color: Colors.white),
+                    ),
+                    onDismissed: (direction) {
+                      remove(model);
                     },
-                    leading: const Icon(Icons.list_alt_rounded),
-                    title: Text(model.name),
-                    subtitle: Text(model.id),
+                    child: ListTile(
+                      onTap: () {
+                        print("Clicou");
+                      },
+                      onLongPress: () {
+                        showFormModal(model: model);
+                      },
+                      leading: const Icon(Icons.list_alt_rounded),
+                      title: Text(model.name),
+                      subtitle: Text(model.id),
+                    ),
                   );
                 }),
               ),
@@ -163,5 +178,10 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       listListins = temp;
     });
+  }
+
+  void remove(Listin model) {
+    firestore.collection("listins").doc(model.id).delete();
+    refresh();
   }
 }
