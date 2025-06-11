@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:listin/firestore_produtos/helpers/enum_order.dart';
 import 'package:uuid/uuid.dart';
 import '../../firestore/models/listin.dart';
 import '../model/produto.dart';
@@ -19,6 +20,9 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  OrdemProduto ordem = OrdemProduto.name;
+  bool isDecrescente = false;
+
   @override
   void initState() {
     refresh();
@@ -28,7 +32,40 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.listin.name)),
+      appBar: AppBar(
+        title: Text(widget.listin.name),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  value: OrdemProduto.name,
+                  child: Text("Ordenar por Nome"),
+                ),
+                PopupMenuItem(
+                  value: OrdemProduto.amount,
+                  child: Text("Ordenar por Quantidade"),
+                ),
+                PopupMenuItem(
+                  value: OrdemProduto.price,
+                  child: Text("Ordenar por Preço"),
+                ),
+              ];
+            },
+            onSelected: (value) {
+              setState(() {
+                if (ordem == value) {
+                  isDecrescente = !isDecrescente;
+                } else {
+                  ordem = value;
+                  isDecrescente = false;
+                }
+              });
+              refresh();
+            },
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showFormModal();
@@ -253,7 +290,8 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
         .collection("listins")
         .doc(widget.listin.id)
         .collection("produtos")
-        .where("isComprado", isEqualTo: isComprado)
+        // .where("isComprado", isEqualTo: isComprado)
+        .orderBy(ordem.name, descending: isDecrescente)
         .get();
 
     for (var doc in snapshot.docs) {
