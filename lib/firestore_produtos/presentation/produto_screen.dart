@@ -25,7 +25,7 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
 
   @override
   void initState() {
-    refresh();
+    setupListeners();
     super.initState();
   }
 
@@ -257,9 +257,6 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
                           .doc(produto.id)
                           .set(produto.toMap());
 
-                      // Atualizar a lista
-                      refresh();
-
                       // Fechar o Modal
                       Navigator.pop(context);
                     },
@@ -274,9 +271,10 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
     );
   }
 
-  refresh() async {
+  refresh({QuerySnapshot<Map<String, dynamic>>? snapshot}) async {
     List<Produto> temp = [];
-    QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
+
+    snapshot ??= await firestore
         .collection("listins")
         .doc(widget.listin.id)
         .collection("produtos")
@@ -319,7 +317,17 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
         .collection("produtos")
         .doc(produto.id)
         .update({"isComprado": produto.isComprado});
+  }
 
-    refresh();
+  setupListeners() {
+    firestore
+        .collection("listins")
+        .doc(widget.listin.id)
+        .collection("produtos")
+        .orderBy(ordem.name, descending: isDecrescente)
+        .snapshots()
+        .listen((snapshot) {
+          refresh(snapshot: snapshot);
+        });
   }
 }
