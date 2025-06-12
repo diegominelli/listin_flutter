@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       leading: const Icon(Icons.list_alt_rounded),
                       title: Text(model.name),
-                      subtitle: Text(model.id),
+                      // subtitle: Text(model.id),
                     ),
                   );
                 }),
