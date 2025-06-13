@@ -181,21 +181,19 @@ class _AuthScreenState extends State<AuthScreen> {
     required String email,
     required String senha,
     required String nome,
-  }) async {
-    String? erro = await authService.cadastrarUsuario(
-      email: email,
-      senha: senha,
-      nome: nome,
-    );
-
-    if (erro == null) {
-      showSnackBar(
-        context: context,
-        mensagem: "Usuário criada com sucesso!",
-        isErro: false,
-      );
-    } else {
-      showSnackBar(context: context, mensagem: erro);
-    }
+  }) {
+    authService.cadastrarUsuario(email: email, senha: senha, nome: nome).then((
+      String? erro,
+    ) {
+      if (erro == null) {
+        showSnackBar(
+          context: context,
+          mensagem: "Usuário criada com sucesso!",
+          isErro: false,
+        );
+      } else {
+        showSnackBar(context: context, mensagem: erro);
+      }
+    });
   }
 }
