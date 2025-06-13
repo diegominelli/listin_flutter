@@ -3,8 +3,27 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  entrarUsuario({required String email, required String senha}) {
-    print("Entrando com usuário");
+  Future<String?> entrarUsuario({
+    required String email,
+    required String senha,
+  }) async {
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: senha,
+      );
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'user-not-found':
+          return 'O e-mail não está cadastrado.';
+        case 'invalid-credential':
+          return 'Senha incorreta.';
+      }
+
+      return e.code;
+    }
+
+    return null;
   }
 
   Future<String?> cadastrarUsuario({
