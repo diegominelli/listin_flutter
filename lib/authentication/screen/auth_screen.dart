@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listin/_core/my_colors.dart';
+import 'package:listin/authentication/component/show_snackbar.dart';
 import 'package:listin/authentication/services/auth_service.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -188,9 +189,13 @@ class _AuthScreenState extends State<AuthScreen> {
     );
 
     if (erro == null) {
-      print("Funcionou! Cadastrado!");
+      showSnackBar(
+        context: context,
+        mensagem: "Usuário criada com sucesso!",
+        isErro: false,
+      );
     } else {
-      print(erro);
+      showSnackBar(context: context, mensagem: erro);
     }
   }
 }
