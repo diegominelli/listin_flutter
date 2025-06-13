@@ -180,7 +180,17 @@ class _AuthScreenState extends State<AuthScreen> {
     required String email,
     required String senha,
     required String nome,
-  }) {
-    authService.cadastrarUsuario(email: email, senha: senha, nome: nome);
+  }) async {
+    String? erro = await authService.cadastrarUsuario(
+      email: email,
+      senha: senha,
+      nome: nome,
+    );
+
+    if (erro == null) {
+      print("Funcionou! Cadastrado!");
+    } else {
+      print(erro);
+    }
   }
 }
