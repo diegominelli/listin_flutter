@@ -14,7 +14,7 @@ class AuthService {
       );
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
-        case 'user-not-found':
+        case 'invalid-email':
           return 'O e-mail não está cadastrado.';
         case 'invalid-credential':
           return 'Senha incorreta.';
@@ -54,6 +54,9 @@ class AuthService {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-email') {
+        return 'O e-mail não está cadastrado.';
+      }
       return e.code;
     }
 
