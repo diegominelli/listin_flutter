@@ -78,10 +78,9 @@ class _StorageScreenState extends State<StorageScreen> {
         )
         .then((XFile? image) {
           if (image != null) {
-            _storageService.upload(
-              file: File(image.path),
-              fileName: "user_photo",
-            );
+            _storageService
+                .upload(file: File(image.path), fileName: "user_photo")
+                .then((value) => reload());
           } else {
             showSnackBar(
               context: context,
@@ -91,5 +90,13 @@ class _StorageScreenState extends State<StorageScreen> {
         });
   }
 
-  reload() {}
+  reload() {
+    _storageService.getDownloadUrlByFileName(fileName: "user_photo").then((
+      urlDownload,
+    ) {
+      setState(() {
+        urlPhoto = urlDownload;
+      });
+    });
+  }
 }
