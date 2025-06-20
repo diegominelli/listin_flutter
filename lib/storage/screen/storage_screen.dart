@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:listin/authentication/component/show_snackbar.dart';
+import 'package:listin/storage/models/image_custom_info.dart';
 import 'package:listin/storage/services/storage_service.dart';
 
 class StorageScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class StorageScreen extends StatefulWidget {
 
 class _StorageScreenState extends State<StorageScreen> {
   String? urlPhoto;
-  List<String> listFiles = [];
+  List<ImageCustomInfo> listFiles = [];
 
   final StorageService _storageService = StorageService();
 
@@ -72,19 +73,19 @@ class _StorageScreenState extends State<StorageScreen> {
             SizedBox(height: 16),
             Column(
               children: List.generate(listFiles.length, (index) {
-                String url = listFiles[index];
+                ImageCustomInfo imageInfo = listFiles[index];
                 return ListTile(
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
                     child: Image.network(
-                      url,
+                      imageInfo.urlDownload,
                       height: 48,
                       width: 48,
                       fit: BoxFit.cover,
                     ),
                   ),
-                  title: Text("Nome da imagem $index"),
-                  subtitle: Text("Tamanho da imagem"),
+                  title: Text(imageInfo.name),
+                  subtitle: Text(imageInfo.size),
                   trailing: IconButton(
                     icon: Icon(Icons.delete, color: Colors.red),
                     onPressed: () {},
@@ -138,9 +139,9 @@ class _StorageScreenState extends State<StorageScreen> {
     //   });
     // });
 
-    _storageService.listAllFiles().then((List<String> listUrlsDownload) {
+    _storageService.listAllFiles().then((List<ImageCustomInfo> listFileInfo) {
       setState(() {
-        listFiles = listUrlsDownload;
+        listFiles = listFileInfo;
       });
     });
   }
