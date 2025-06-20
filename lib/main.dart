@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const StorageScreen(),
+      home: const RoteadorTelas(),
     );
   }
 }

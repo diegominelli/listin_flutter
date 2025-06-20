@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:listin/authentication/component/show_senha_confirmacao_dialog.dart';
 import 'package:listin/authentication/services/auth_service.dart';
 import 'package:listin/firestore_produtos/presentation/produto_screen.dart';
+import 'package:listin/storage/screen/storage_screen.dart';
 import 'package:uuid/uuid.dart';
 import '../models/listin.dart';
 import '../helpers/firestore_analytics.dart';
@@ -45,6 +46,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     : "",
               ),
               accountEmail: Text(widget.user.email!),
+            ),
+            ListTile(
+              leading: Icon(Icons.image),
+              title: Text("Mudar foto de perfil"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StorageScreen()),
+                );
+              },
             ),
             ListTile(
               leading: Icon(Icons.delete, color: Colors.red),
