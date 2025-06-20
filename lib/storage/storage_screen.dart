@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:listin/authentication/component/show_snackbar.dart';
 
 class StorageScreen extends StatefulWidget {
   const StorageScreen({super.key});
@@ -60,7 +62,26 @@ class _StorageScreenState extends State<StorageScreen> {
     );
   }
 
-  uploadImage() {}
+  uploadImage() {
+    ImagePicker imagePicker = ImagePicker();
+    imagePicker
+        .pickImage(
+          source: ImageSource.gallery,
+          maxHeight: 2000,
+          maxWidth: 2000,
+          imageQuality: 50,
+        )
+        .then((XFile? image) {
+          if (image != null) {
+            showSnackBar(context: context, mensagem: image.path, isErro: false);
+          } else {
+            showSnackBar(
+              context: context,
+              mensagem: "Nenhuma imagem não selecionada.",
+            );
+          }
+        });
+  }
 
   reload() {}
 }
