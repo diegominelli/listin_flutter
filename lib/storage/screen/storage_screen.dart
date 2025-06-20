@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:listin/authentication/component/show_snackbar.dart';
+import 'package:listin/storage/services/storage_service.dart';
 
 class StorageScreen extends StatefulWidget {
   const StorageScreen({super.key});
@@ -13,6 +16,8 @@ class StorageScreen extends StatefulWidget {
 class _StorageScreenState extends State<StorageScreen> {
   String? urlPhoto;
   List<String> listFiles = [];
+
+  final StorageService _storageService = StorageService();
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +78,10 @@ class _StorageScreenState extends State<StorageScreen> {
         )
         .then((XFile? image) {
           if (image != null) {
-            showSnackBar(context: context, mensagem: image.path, isErro: false);
+            _storageService.upload(
+              file: File(image.path),
+              fileName: "user_photo",
+            );
           } else {
             showSnackBar(
               context: context,

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:listin/_core/my_colors.dart';
 import 'package:listin/authentication/screen/auth_screen.dart';
 import 'package:listin/firestore/presentation/home_screen.dart';
-import 'package:listin/storage/storage_screen.dart';
+import 'package:listin/storage/screen/storage_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
