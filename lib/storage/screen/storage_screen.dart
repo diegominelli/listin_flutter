@@ -45,7 +45,15 @@ class _StorageScreenState extends State<StorageScreen> {
         child: Column(
           children: [
             (urlPhoto != null)
-                ? Image.network(urlPhoto!)
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(64),
+                    child: Image.network(
+                      urlPhoto!,
+                      height: 128,
+                      width: 128,
+                      fit: BoxFit.cover,
+                    ),
+                  )
                 : const CircleAvatar(radius: 64, child: Icon(Icons.person)),
             Padding(
               padding: const EdgeInsets.all(16),
