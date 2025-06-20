@@ -47,4 +47,8 @@ class StorageService {
 
     return listFiles;
   }
+
+  Future<void> deleteByReference({required Reference ref}) async {
+    return await ref.delete();
+  }
 }

@@ -75,6 +75,9 @@ class _StorageScreenState extends State<StorageScreen> {
               children: List.generate(listFiles.length, (index) {
                 ImageCustomInfo imageInfo = listFiles[index];
                 return ListTile(
+                  onTap: () {
+                    selectImage(imageInfo);
+                  },
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
                     child: Image.network(
@@ -88,7 +91,9 @@ class _StorageScreenState extends State<StorageScreen> {
                   subtitle: Text(imageInfo.size),
                   trailing: IconButton(
                     icon: Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {},
+                    onPressed: () {
+                      deleteImage(imageInfo);
+                    },
                   ),
                 );
               }),
@@ -143,6 +148,21 @@ class _StorageScreenState extends State<StorageScreen> {
       setState(() {
         listFiles = listFileInfo;
       });
+    });
+  }
+
+  selectImage(ImageCustomInfo imageInfo) {
+    setState(() {
+      urlPhoto = imageInfo.urlDownload;
+    });
+  }
+
+  deleteImage(ImageCustomInfo imageInfo) {
+    _storageService.deleteByReference(ref: imageInfo.ref).then((value) {
+      if (urlPhoto == imageInfo.urlDownload) {
+        urlPhoto = null;
+      }
+      reload();
     });
   }
 }
