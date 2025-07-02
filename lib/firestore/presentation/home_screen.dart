@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:listin/authentication/component/show_senha_confirmacao_dialog.dart';
 import 'package:listin/authentication/services/auth_service.dart';
+import 'package:listin/firestore/services/listin_service.dart';
 import 'package:listin/firestore_produtos/presentation/produto_screen.dart';
 import 'package:listin/storage/screen/storage_screen.dart';
 import 'package:uuid/uuid.dart';
@@ -20,13 +21,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Listin> listListins = [];
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  FirestoreAnalytics analytics = FirestoreAnalytics();
+  ListinService listinService = ListinService();
+
+  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // FirestoreAnalytics analytics = FirestoreAnalytics();
 
   @override
   void initState() {
     refresh();
-    analytics.incrementarAcessosTotais();
+    // analytics.incrementarAcessosTotais();
     super.initState();
   }
 
@@ -93,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           : RefreshIndicator(
               onRefresh: () {
-                analytics.incrementarAtualizacoesManuais();
+                // analytics.incrementarAtualizacoesManuais();
                 return refresh();
               },
               child: ListView(
@@ -195,12 +198,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
 
                       // Salvar no Firestore
-                      firestore
-                          .collection("listins")
-                          .doc(listin.id)
-                          .set(listin.toMap());
+                      listinService.adicionarListin(listin: listin);
+                      // firestore
+                      //     .collection("listins")
+                      //     .doc(listin.id)
+                      //     .set(listin.toMap());
 
-                      analytics.incrementarListasAdicionadas();
+                      // analytics.incrementarListasAdicionadas();
 
                       // Atualizar a lista
                       refresh();
@@ -220,23 +224,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   refresh() async {
-    List<Listin> temp = [];
-
-    QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
-        .collection("listins")
-        .get();
-
-    for (var doc in snapshot.docs) {
-      temp.add(Listin.fromMap(doc.data()));
-    }
-
+    List<Listin> listaListins = await listinService.lerListins();
     setState(() {
-      listListins = temp;
+      listListins = listaListins;
     });
   }
 
-  void remove(Listin model) {
-    firestore.collection("listins").doc(model.id).delete();
+  void remove(Listin model) async {
+    await listinService.removerListin(listinId: model.id);
     refresh();
   }
 }
